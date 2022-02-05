@@ -64,3 +64,6 @@ function onImageClick(e) {
     if (e.code === 'Escape') instance.close();
   }
 }
+var lightbox = new SimpleLightbox('.gallery a', {
+  /* options */
+});
