@@ -13,57 +13,25 @@ console.log(galleryItems);
 // Открытие модального окна по клику на элементе галереи. Для этого ознакомься с документацией и примерами.
 // Замена значения атрибута src элемента <img> в модальном окне перед открытием. Используй готовую разметку модального окна с изображением из примеров библиотеки basicLightbox.
 
-const galleryRef = document.querySelector('.gallery');
-// create html
-const items = galleryItems
-  .map(({ preview, original, description }) => {
-    const listEl = `<div class="gallery__item">
-    <a class="gallery__link" href="${original}">
-      <img
-        class="gallery__image"
-        src="${preview}"
-        data-source="${original}"
-        alt="${description}"
-      />
-    </a>
-  </div>`;
-    return listEl;
-  })
-  .join('');
+const imgContainer = document.querySelector('div.gallery');
+const cardMarkup = creteImgCard(galleryItems);
 
-galleryRef.insertAdjacentHTML('beforeend', items);
+imgContainer.insertAdjacentHTML('beforeend', cardMarkup);
+// imgContainer.addEventListener('click', onImgContainerClick)
 
-//create event
-galleryRef.addEventListener('click', onImageClick);
-
-function onImageClick(e) {
-  if (e.target.nodeName !== 'IMG') {
-    return;
-  }
-
-  e.preventDefault();
-
-  const instance = basicLightbox.create(
-    `<img src="${e.target.dataset.source}" width="800" height="600">
-      `,
-    {
-      onShow: instance => console.log('onShow', instance),
-      onClose: instance => console.log('onClose', instance),
-    },
-  );
-
-  instance.show();
-
-  if (basicLightbox.visible()) {
-    window.addEventListener('keydown', onEscClose);
-    //console.log('повесила слушатель');
-  }
-
-  function onEscClose(e) {
-    //console.log(e);
-    if (e.code === 'Escape') instance.close();
-  }
+function creteImgCard(galleryItems) {
+  return galleryItems
+    .map(({ preview, original, description }) => {
+      return `
+    <div class="gallery__item">
+      <a class="gallery__item" href="${original}" onclick="event.preventDefault()">
+        <img class="gallery__image" src="${preview}" alt="Image description" title = "${description}" />
+      </a>
+    </div>`;
+    })
+    .join('');
 }
+
 var lightbox = new SimpleLightbox('.gallery a', {
   /* options */
 });
